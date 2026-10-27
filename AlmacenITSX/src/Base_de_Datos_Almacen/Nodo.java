@@ -1,3 +1,5 @@
+// Nodo.java
+
 package Base_de_Datos_Almacen;
 
 // Cada nodo del árbol ES un producto del almacén.

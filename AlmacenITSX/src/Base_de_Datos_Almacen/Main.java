@@ -1,3 +1,4 @@
+// Main.java
 package Base_de_Datos_Almacen;
 
 import java.util.Scanner;
@@ -27,6 +28,7 @@ public class Main {
                 case 4:
                     mostrarInventario(inventario);
                     break;
+                case 0:
                 case 5:
                     System.out.println("  Saliendo del sistema... ¡Hasta pronto!");
                     break;
@@ -48,7 +50,7 @@ public class Main {
         System.out.println("   2. Buscar producto por nombre");
         System.out.println("   3. Dar de baja / Eliminar producto");
         System.out.println("   4. Mostrar inventario completo (InOrder)");
-        System.out.println("   5. Salir");
+        System.out.println("   0 o 5. Salir");
         System.out.println("  ==========================================");
     }
 
@@ -56,18 +58,26 @@ public class Main {
     // OPCIONES
     // ------------------------------------------------------------------
     static void registrarProducto(ArbBinBusq inventario) {
-        System.out.println("  --- REGISTRAR PRODUCTO ---");
+        System.out.println("  --- REGISTRAR PRODUCTO (Pulsa 0 para salir) --- ");
         String nombre = leerNombre("  Nombre del producto: ");
-        if (nombre.isEmpty()) {
-            System.out.println("  El nombre no puede estar vacío.");
+        if (nombre.equals("0") || nombre.isEmpty()) {
+            System.out.println(" Operación Cancelada. Volviendo al menú ...");
             return;
         }
         if (inventario.buscar(nombre) != null) {
             System.out.println("  El producto \"" + nombre + "\" ya existe en el inventario.");
             return;
         }
-        int stock = leerEntero("  Stock (cantidad): ");
+        int stock = leerEntero("  Stock (cantidad) [0 para cancelar]: ");
+        if (stock == 0) {
+            System.out.print("Operación cancelada. Volviendo al menu ...");
+            return;
+        }
+
         double precio = leerDouble("  Precio unitario: $");
+        if (precio == 0){
+            System.out.println("Operacion canelada. Volviendo al menú ...");
+        }
 
         if (stock < 0 || precio < 0) {
             System.out.println("  El stock y el precio no pueden ser negativos.");
@@ -79,8 +89,12 @@ public class Main {
     }
 
     static void buscarProducto(ArbBinBusq inventario) {
-        System.out.println("  --- BUSCAR PRODUCTO ---");
+        System.out.println("  --- BUSCAR PRODUCTO (Pulsa 0 para cancelar)---");
         String nombre = leerNombre("  Nombre del producto: ");
+        if (nombre.equals("0") || nombre.isEmpty()) {
+            System.out.println("Operacion canelada. Volviendo al menú ...");
+        }
+
         Nodo encontrado = inventario.buscar(nombre);
 
         if (encontrado == null) {
@@ -94,8 +108,11 @@ public class Main {
     }
 
     static void eliminarProducto(ArbBinBusq inventario) {
-        System.out.println("  --- ELIMINAR PRODUCTO ---");
+        System.out.println("  --- ELIMINAR PRODUCTO (Pulsa 0 para cancelar) ---");
         String nombre = leerNombre("  Nombre del producto a dar de baja: ");
+        if (nombre.equals("0") || nombre.isEmpty()) {
+            System.out.println("Operacion cancelada. Volviendo al menú ...");
+        }
 
         if (inventario.eliminar(nombre)) {
             System.out.println("  Producto \"" + nombre + "\" eliminado correctamente.");
@@ -124,7 +141,7 @@ public class Main {
     static String leerNombre(String mensaje) {
         System.out.print(mensaje);
         String texto = sc.nextLine().trim();
-        if (texto.isEmpty()) return "";
+        if (texto.isEmpty() || texto.equals("0")) return texto;
         return texto.substring(0, 1).toUpperCase() + texto.substring(1).toLowerCase();
     }
 
